@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var viewModel = AAViewModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
+        ZStack {
+            Color.teal.opacity(0.3)
+                .ignoresSafeArea()
+            
             Text("Hello, world!")
         }
-        .padding()
     }
 }
 
