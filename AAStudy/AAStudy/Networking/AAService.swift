@@ -7,22 +7,33 @@
 
 import Foundation
 
+enum AAError: Error {
+    case invalidResponse(statusCode: Int)
+}
+
 final class AAService {
     
-    func fetchCharacters() async throws  { //-> [Character]?
+    func fetchCharacters() async throws -> [Character]? {
         let urlString = "https://rickandmortyapi.com/api/character"
         
-        guard let url = URL(string: urlString) else { return  }
+        guard let url = URL(string: urlString) else { return [] }
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
-            let characterList = try JSONDecoder().decode(CharacterResponse.self, from: data)
-            print("👻 DEBUG: response ->\(response as? HTTPURLResponse)")
-            print("👻 DEBUG: characterList -> \(characterList)")
-           // return characterList
+            
+            let statusCode = (response as? HTTPURLResponse)?.statusCode
+            
+            guard statusCode == 200 else {
+                throw AAError.invalidResponse(statusCode: statusCode ?? -1)
+            }
+            
+            let characterResponse = try JSONDecoder().decode(CharacterResponse.self, from: data)
+            
+            return characterResponse.results
+           
         } catch let error {
             print("👻 DEBUG: error -> \(error.localizedDescription)")
-            //return nil
+            return nil
         }
     }
 }

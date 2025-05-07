@@ -9,12 +9,19 @@ import Foundation
 
 final class AAViewModel: ObservableObject {
     private let service = AAService()
+    @Published private(set) var characters: [Character]? = []
     
     init() {
-        Task { try? await fetchData() }
+       // Task { try? await fetchData() }
     }
     
     func fetchData() async throws {
-        try? await service.fetchCharacters()
+        let list = try? await service.fetchCharacters()
+        
+        await MainActor.run {
+            characters = list
+        }
+        
+        print("👻 DEBUG: characters ->\(characters?.count)")
     }
 }

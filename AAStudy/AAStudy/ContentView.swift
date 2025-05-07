@@ -11,11 +11,20 @@ struct ContentView: View {
     @StateObject var viewModel = AAViewModel()
     
     var body: some View {
-        ZStack {
-            Color.teal.opacity(0.3)
-                .ignoresSafeArea()
+        List {
+            if viewModel.characters?.count ?? 0 > 0 {
+                ForEach(viewModel.characters ?? []) { character in
+                    CharacterView(name: character.name, status: character.status)
+                }
+            } else {
+                CharacterView(name: "Ricky", status: "alive")
+            }
             
-            Text("Hello, world!")
+        }.onAppear {
+            Task {
+                try? await viewModel.fetchData()
+            }
+            
         }
     }
 }
@@ -23,3 +32,4 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
+
