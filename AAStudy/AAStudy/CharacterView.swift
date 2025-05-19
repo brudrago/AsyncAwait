@@ -10,12 +10,30 @@ import SwiftUI
 struct CharacterView: View {
     let name: String
     let status: String
+    let imageUrl: String?
     
     var body: some View {
         HStack(spacing: 8) {
-            Circle()
-                .fill(Color.red)
-                .frame(width: 60, height: 60)
+            if let url = URL(string: imageUrl ?? "") {
+//                AsyncImage(
+//                    url: url,
+//                    content: { image in
+//                        image.resizable()
+//                            .aspectRatio(contentMode: .fit)
+//                            .frame(maxWidth: 60, maxHeight: 60)
+//                            .clipShape(Circle())
+//                    },
+//                    placeholder: {
+//                        ProgressView()
+//                    }
+//                )
+                CachedAsyncImage(url: url)
+            } else {
+                Circle()
+                    .fill(Color.red)
+                    .frame(width: 60, height: 60)
+            }
+            
             VStack(alignment: .leading ,spacing: 4) {
                 Text(name)
                     .font(.headline)
@@ -31,6 +49,6 @@ struct CharacterView: View {
     }
 }
 
-#Preview {
-    CharacterView(name: "Ricky", status: "Alive")
-}
+//#Preview {
+//    CharacterView(name: "Ricky", status: "Alive", imageUrl: "", model: <#any AAViewModelProtocol#>)
+//}

@@ -9,14 +9,18 @@ import Foundation
 
 enum AAError: Error {
     case invalidResponse(statusCode: Int)
+    case invalidURL
 }
 
-final class AAService {
+protocol AAServiceProtocol {
+    func fetch(_ urlString: String) async throws -> Result<Data, Error>
+}
+
+final class AAService: AAServiceProtocol {
+    init() {}
     
-    func fetchCharacters() async throws -> [Character]? {
-        let urlString = "https://rickandmortyapi.com/api/character"
-        
-        guard let url = URL(string: urlString) else { return [] }
+    func fetch(_ urlString: String) async throws -> Result<Data, Error> {
+        guard let url = URL(string: urlString) else { return .failure(AAError.invalidURL) }
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
@@ -27,13 +31,11 @@ final class AAService {
                 throw AAError.invalidResponse(statusCode: statusCode ?? -1)
             }
             
-            let characterResponse = try JSONDecoder().decode(CharacterResponse.self, from: data)
-            
-            return characterResponse.results
+            return .success(data)
            
         } catch let error {
             print("👻 DEBUG: error -> \(error.localizedDescription)")
-            return nil
+            return .failure(error)
         }
     }
 }

@@ -7,12 +7,19 @@
 
 import Foundation
 
-final class AAViewModel: ObservableObject {
-    private let service = AAService()
-    @Published private(set) var characters: [Character]? = []
+protocol AAViewModelProtocol: ObservableObject {
+    func fetchData() async throws
+    var characters: [Character]? { get }
+}
+
+final class AAViewModel: AAViewModelProtocol {
     
-    init() {
-       // Task { try? await fetchData() }
+    @Published var characters: [Character]?
+    
+    private let service: FetchCharacterUseCasing
+    
+    init(service: any FetchCharacterUseCasing) {
+        self.service = service
     }
     
     func fetchData() async throws {

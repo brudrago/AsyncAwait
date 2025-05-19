@@ -7,17 +7,22 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    @StateObject var viewModel = AAViewModel()
+struct ContentView<ViewModel: AAViewModelProtocol>: View {
+    @StateObject var viewModel: ViewModel
     
     var body: some View {
         List {
-            if viewModel.characters?.count ?? 0 > 0 {
+            if let characters = viewModel.characters, characters.count > 0 {
                 ForEach(viewModel.characters ?? []) { character in
-                    CharacterView(name: character.name, status: character.status)
+                    CharacterView(
+                        name: character.name,
+                        status: character.status,
+                        imageUrl: character.image
+                    )
                 }
-            } else {
-                CharacterView(name: "Ricky", status: "alive")
+            }
+             else {
+                CharacterView(name: "Ricky", status: "alive", imageUrl: "")
             }
             
         }.onAppear {
@@ -29,7 +34,7 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
-}
+//#Preview {
+//    ContentView<<#ViewModel: AAViewModelProtocol#>>(viewModel: <#_#>)
+//}
 
