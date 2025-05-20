@@ -23,7 +23,7 @@ final class FetchCharacterUseCase: FetchCharacterUseCasing {
         let result = try await service.fetch(urlString)
         
         switch result {
-        case .success(let data):
+        case .success((let data, let response)):
             let characterResponse = try JSONDecoder().decode(CharacterResponse.self, from: data)
             
             return characterResponse.results

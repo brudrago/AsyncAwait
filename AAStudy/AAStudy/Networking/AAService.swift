@@ -13,13 +13,13 @@ enum AAError: Error {
 }
 
 protocol AAServiceProtocol {
-    func fetch(_ urlString: String) async throws -> Result<Data, Error>
+    func fetch(_ urlString: String) async throws -> Result<(Data, URLResponse), Error>
 }
 
 final class AAService: AAServiceProtocol {
     init() {}
     
-    func fetch(_ urlString: String) async throws -> Result<Data, Error> {
+    func fetch(_ urlString: String) async throws -> Result<(Data, URLResponse), Error> {
         guard let url = URL(string: urlString) else { return .failure(AAError.invalidURL) }
         
         do {
@@ -31,7 +31,7 @@ final class AAService: AAServiceProtocol {
                 throw AAError.invalidResponse(statusCode: statusCode ?? -1)
             }
             
-            return .success(data)
+            return .success((data, response))
            
         } catch let error {
             print("👻 DEBUG: error -> \(error.localizedDescription)")

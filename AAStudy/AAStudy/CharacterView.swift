@@ -15,18 +15,6 @@ struct CharacterView: View {
     var body: some View {
         HStack(spacing: 8) {
             if let url = URL(string: imageUrl ?? "") {
-//                AsyncImage(
-//                    url: url,
-//                    content: { image in
-//                        image.resizable()
-//                            .aspectRatio(contentMode: .fit)
-//                            .frame(maxWidth: 60, maxHeight: 60)
-//                            .clipShape(Circle())
-//                    },
-//                    placeholder: {
-//                        ProgressView()
-//                    }
-//                )
                 CachedAsyncImage(url: url)
             } else {
                 Circle()

@@ -1,9 +1,5 @@
 import SwiftUI
 
-final class AACacheManager {
-    
-}
-
 public struct CachedAsyncImage: View {
     private let url: URL?
     @State private var image: Image? = nil
