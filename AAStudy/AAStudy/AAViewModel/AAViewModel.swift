@@ -1,15 +1,10 @@
-//
-//  AAViewModel.swift
-//  AAStudy
-//
-//  Created by Bruna Drago on 04/05/25.
-//
-
 import Foundation
+import SwiftUI
 
 protocol AAViewModelProtocol: ObservableObject {
     func fetchData() async throws
     var characters: [Character]? { get }
+    func makeImageViewModel() -> any ImageViewModelProtocol
 }
 
 final class AAViewModel: AAViewModelProtocol {
@@ -17,9 +12,14 @@ final class AAViewModel: AAViewModelProtocol {
     @Published var characters: [Character]?
     
     private let service: FetchCharacterUseCasing
+    private let factoryVM: ImageViewModelFactory
     
-    init(service: any FetchCharacterUseCasing) {
+    init(
+        service: any FetchCharacterUseCasing,
+        factoryVM: ImageViewModelFactory
+    ) {
         self.service = service
+        self.factoryVM = factoryVM
     }
     
     func fetchData() async throws {
@@ -31,4 +31,10 @@ final class AAViewModel: AAViewModelProtocol {
         
         print("👻 DEBUG: characters ->\(characters?.count)")
     }
+    
+    func makeImageViewModel() -> any ImageViewModelProtocol {
+        factoryVM.make()
+    }
 }
+
+

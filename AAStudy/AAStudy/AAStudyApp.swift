@@ -11,7 +11,7 @@ import SwiftUI
 struct AAStudyApp: App {
     var body: some Scene {
         WindowGroup {
-            AAFactory.make()
+            ContentViewFactory.make()
         }
     }
 }

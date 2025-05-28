@@ -40,7 +40,7 @@ final class FetchImageUseCase: FetchImageProtocol {
         
         switch result {
         case .success((let data, let response)):
-            cacheManager.cacheData(with: response, data: data)
+            cacheManager.cacheData(with: response, data: data, url: url)
             if let uiImage = UIImage(data: data) {
                 return Image(uiImage: uiImage)
             }

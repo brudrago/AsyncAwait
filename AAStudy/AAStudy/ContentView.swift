@@ -13,16 +13,18 @@ struct ContentView<ViewModel: AAViewModelProtocol>: View {
     var body: some View {
         List {
             if let characters = viewModel.characters, characters.count > 0 {
-                ForEach(viewModel.characters ?? []) { character in
+                ForEach(viewModel.characters ?? [Character]()) { character in
+
                     CharacterView(
                         name: character.name,
                         status: character.status,
-                        imageUrl: character.image
+                        imageUrl: character.image,
+                        imageViewModel: viewModel.makeImageViewModel()
                     )
                 }
             }
              else {
-                CharacterView(name: "Ricky", status: "alive", imageUrl: "")
+                 CharacterView(name: "Ricky", status: "alive", imageUrl: "", imageViewModel: viewModel.makeImageViewModel())
             }
             
         }.onAppear {
@@ -33,8 +35,4 @@ struct ContentView<ViewModel: AAViewModelProtocol>: View {
         }
     }
 }
-
-//#Preview {
-//    ContentView<<#ViewModel: AAViewModelProtocol#>>(viewModel: <#_#>)
-//}
 
